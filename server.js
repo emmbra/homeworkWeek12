@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 
+
 const mainMenu = () => {
     inquirer.prompt([
         {
@@ -22,6 +23,82 @@ const mainMenu = () => {
 }
 
 const addNewEmployee = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "firstname",
+            message: "Enter employee's first name:"
+            //validate - add validation later
+        },
+        {
+            type: "input",
+            name: "lastname",
+            message: "Enter employee's last name:"
+            //validate - add validation later
+        },
+        {
+            type: "input",
+            name: "firstname",
+            message: "Enter employee's first name:"
+            //validate - add validation later
+        },
+        {
+            type: "input",
+            name: "managerfirstname",
+            message: "Enter employee's manager's first name:"
+            //validate - add validation later
+        },
+        {
+            type: "input",
+            name: "managerlastname",
+            message: "Enter employee's manager's last name:"
+            //validate - add validation later
+        },
+        {
+            type: "list",
+            name: "employeerole",
+            message: "Select employee's role:"
+            choices: [
+                "Lawyer",
+                "Accountant",
+                "Sales Manager",
+                "Project Manager",
+                "Software Engineer"
+            ]
+        },
+        {
+            type: "list",
+            name: "employeedept",
+            message: "Select employee's department:"
+            choices: [
+                "IT",
+                "HR",
+                "Legal",
+                "Finance",
+                "Administration"
+            ]
+        }
+    ]).then answer => {
+        const firstName = answer.firstname;
+        const lastName = answer.lastname;
+        const managerFirstName = answer.managerfirstname;
+        const managerLastName = answer.managerlastname;
+
+        answer.employeerole = "Lawyer" ? role_id = 1 :
+        answer.employeerole = "Accountant" ? role_id = 2 :
+        answer.employeerole = "Sales Manager" ? role_id = 3 :
+        answer.employeerole = "Project Manager" ? role_id = 4 :
+        answer.employeerole = "Software Engineer" ? role_id = 5
+
+        answer.employeedept = "IT" ? dept_id = 1 :
+        answer.employeedept = "IT" ? dept_id = 2 :
+        answer.employeedept = "IT" ? dept_id = 3 :
+        answer.employeedept = "IT" ? dept_id = 4 :
+        answer.employeedept = "IT" ? dept_id = 5
+
+        //need to use sql to insert answers into employee table
+
+    }
 }
 updateEmployeeRole()
 viewAllEmployees()
