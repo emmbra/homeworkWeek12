@@ -83,6 +83,7 @@ const addNewEmployee = () => {
         const lastName = answer.lastname;
         const managerFirstName = answer.managerfirstname;
         const managerLastName = answer.managerlastname;
+        let managerID = 1;
 
         answer.employeerole = "Lawyer" ? role_id = 1 :
         answer.employeerole = "Accountant" ? role_id = 2 :
@@ -91,12 +92,14 @@ const addNewEmployee = () => {
         answer.employeerole = "Software Engineer" ? role_id = 5
 
         answer.employeedept = "IT" ? dept_id = 1 :
-        answer.employeedept = "IT" ? dept_id = 2 :
-        answer.employeedept = "IT" ? dept_id = 3 :
-        answer.employeedept = "IT" ? dept_id = 4 :
-        answer.employeedept = "IT" ? dept_id = 5
+        answer.employeedept = "HR" ? dept_id = 2 :
+        answer.employeedept = "Legal" ? dept_id = 3 :
+        answer.employeedept = "Finance" ? dept_id = 4 :
+        answer.employeedept = "Administration" ? dept_id = 5
 
         //need to use sql to insert answers into employee table
+        // INSERT INTO employee_table (first_name, last_name, role_id, manager_id)
+        // VALUES (firstName, lastName, role_id, managerID)
 
     }
 }
