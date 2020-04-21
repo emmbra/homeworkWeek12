@@ -61,7 +61,7 @@ const addNewEmployee = () => {
             choices: [
                 "Lawyer",
                 "Accountant",
-                "Sales Manager",
+                "Receptionist",
                 "Project Manager",
                 "Software Engineer"
             ]
@@ -86,7 +86,7 @@ const addNewEmployee = () => {
 
         answer.employeerole = "Lawyer" ? role_id = 1 :
         answer.employeerole = "Accountant" ? role_id = 2 :
-        answer.employeerole = "Sales Manager" ? role_id = 3 :
+        answer.employeerole = "Receptionist" ? role_id = 3 :
         answer.employeerole = "Project Manager" ? role_id = 4 :
         answer.employeerole = "Software Engineer" ? role_id = 5
 
