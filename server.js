@@ -67,14 +67,23 @@ const mainMenu = () => {
     })
 }
 
-// viewAllEmployees();
+const viewAllEmployees = () => {
+    const query = "SELECT * FROM employee_table;";
+    connection.query(query, function(err, res) {
+        if(err) throw err;
+        console.table(res);
+        mainMenu();
+    })
+
+}
 
 const viewAllDepartments = () => {
     const query = "SELECT * FROM dept_table;";
     connection.query(query, function (err, res) {
+        if(err) throw err;
         console.table(res);
         mainMenu();
-    })
+    });
 }
 
 

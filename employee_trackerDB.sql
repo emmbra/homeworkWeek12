@@ -34,19 +34,19 @@ VALUES (1, "IT"),
 (4, "Finance"),
 (5, "Administration");
 
-INSERT INTO role_table (title, salary, dept_id)
-VALUES ("Lawyer", 160000, 3),
-("Accountant", 137000, 4),
-("Receptionist", 100000, 5),
-("Project Manager", 140000, 2),
-("Software Engineer", 120000, 1);
+INSERT INTO role_table (id, title, salary, dept_id)
+VALUES (1, "Lawyer", 160000, 3),
+(2, "Accountant", 137000, 4),
+(3, "Receptionist", 100000, 5),
+(4, "Project Manager", 140000, 2),
+(5, "Software Engineer", 120000, 1);
 
-INSERT INTO employee_table (first_name, last_name)
-VALUES ("Emmett", "Brady"),
-("Clara", "Rice"),
-("Musa", "Akbari"),
-("Sergio", "Di Martino"),
-("Manny", "Jucaban");
+INSERT INTO employee_table (id, first_name, last_name, role_id, manager_id)
+VALUES (1, "Emmett", "Brady", 1, 1),
+(2, "Clara", "Rice", 2, 2),
+(3, "Musa", "Akbari", 3, 3),
+(4, "Sergio", "Di Martino", 4, NULL),
+(5, "Manny", "Jucaban", 5, NULL);
 
 
 SELECT * FROM dept_table;
