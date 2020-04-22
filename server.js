@@ -69,25 +69,31 @@ const mainMenu = () => {
 
 const viewAllEmployees = () => {
     const query = "SELECT * FROM employee_table;";
-    connection.query(query, function(err, res) {
-        if(err) throw err;
-        console.table(res);
-        mainMenu();
-    })
-
-}
-
-const viewAllDepartments = () => {
-    const query = "SELECT * FROM dept_table;";
-    connection.query(query, function (err, res) {
+    connection.query(query, (err, res) => {
         if(err) throw err;
         console.table(res);
         mainMenu();
     });
-}
+};
 
+const viewAllDepartments = () => {
+    const query = "SELECT * FROM dept_table;";
+    connection.query(query, (err, res) => {
+        if(err) throw err;
+        console.table(res);
+        mainMenu();
+    });
+};
 
-// viewAllRoles();
+const viewAllRoles = () => {
+    const query = "SELECT * FROM role_table;";
+    connection.query(query, (err, res) => {
+        if(err) throw err;
+        console.table(res);
+        mainMenu();
+    });
+};
+
 // addNewEmployee();
 // addNewDepartment();
 // addNewRole()
