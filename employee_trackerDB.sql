@@ -27,12 +27,12 @@ CREATE TABLE employee_table (
 );
 
 -- seed data
-INSERT INTO dept_table (dept_name)
-VALUES ("IT"),
-("HR"),
-("Legal"),
-("Finance"),
-("Administration");
+INSERT INTO dept_table (id, dept_name)
+VALUES (1, "IT"),
+(2, "HR"),
+(3, "Legal"),
+(4, "Finance"),
+(5, "Administration");
 
 INSERT INTO role_table (title, salary, dept_id)
 VALUES ("Lawyer", 160000, 3),

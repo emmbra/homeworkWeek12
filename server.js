@@ -68,7 +68,16 @@ const mainMenu = () => {
 }
 
 // viewAllEmployees();
-// viewAllDepartments();
+
+const viewAllDepartments = () => {
+    const query = "SELECT * FROM dept_table;";
+    connection.query(query, function (err, res) {
+        console.table(res);
+        mainMenu();
+    })
+}
+
+
 // viewAllRoles();
 // addNewEmployee();
 // addNewDepartment();
