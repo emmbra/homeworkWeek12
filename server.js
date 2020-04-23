@@ -123,7 +123,7 @@ const addNewEmployee = () => {
             //     choicesArray.push(role_table[i].title)
             // }
             // return choicesArray;
-          },
+          }
         },
         {
           name: "manager",
@@ -136,8 +136,8 @@ const addNewEmployee = () => {
             //     choicesArray.push(role_table[i].manager_id)
             // }
             // return choicesArray;
-          },
-        },
+          }
+        }
       ])
       .then((answer) => {
         const query = `
@@ -180,6 +180,56 @@ const addNewDepartment = () => {
     });
 };
 
-// addNewRole()
+const addNewRole = () => {
+    connection.query("SELECT * FROM dept_table;", (err, res) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name: "roleName",
+                type: "input",
+                message: "Enter name of new role:"
+            },
+            {
+                name: "roleSalary",
+                type: "input",
+                message: "Enter salary of new role:",
+                validate: function(value) {
+                    if(isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "roleDept",
+                type: "rawlist",
+                message: "Select department of new role:",
+                choices: function () {
+                    return role_table.map((role) => res.manager_id);
+                    // const choicesArray = [];
+                    // for(let i = 0; i < role_table.length; i++) {
+                    //     choicesArray.push(role_table[i].manager_id)
+                    // }
+                    // return choicesArray;
+            }
+        ]).then(answer => {
+            const query =
+            `INSERT INTO role_table (title, salary, dept_id)
+            VALUES (?, ?, ?)`;
+            connection.query(
+                query,
+                [answer.roleName, answer.roleSalary, answer.roleDept],
+                (err, res) => {
+                  if (err) throw err;
+                  console.log(
+                    `${answer.roleName} has been successfully added to the role list!`
+                  );
+                  mainMenu();
+          }
+        );
+      });
+  });
+};
+    
 
 // updateEmployeeRole();
