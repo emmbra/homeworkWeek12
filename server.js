@@ -117,27 +117,27 @@ const addNewEmployee = () => {
           type: "rawlist",
           message: "Select role of new employee:",
           choices: function () {
-            return role_table.map((role) => res.title);
+            return role_table.map(() => res.title);
             // const choicesArray = [];
             // for(let i  = 0; i < role_table.length; i++) {
             //     choicesArray.push(role_table[i].title)
             // }
             // return choicesArray;
-          }
+          },
         },
         {
           name: "manager",
           type: "rawlist",
           message: "Select manager of new employee:",
           choices: function () {
-            return role_table.map((role) => res.manager_id);
+            return role_table.map(() => res.manager_id);
             // const choicesArray = [];
             // for(let i = 0; i < role_table.length; i++) {
             //     choicesArray.push(role_table[i].manager_id)
             // }
             // return choicesArray;
-          }
-        }
+          },
+        },
       ])
       .then((answer) => {
         const query = `
@@ -146,7 +146,7 @@ const addNewEmployee = () => {
         connection.query(
           query,
           [answer.firstName, answer.lastName, answer.role, answer.manager],
-          (err, res) => {
+          (err) => {
             if (err) throw err;
             console.log(
               `${answer.firstName} ${answer.lastName} has been successfully added to the employee list!`
@@ -170,7 +170,7 @@ const addNewDepartment = () => {
         INSERT INTO dept_table (id, dept_name)
         VALUES (0, ?);`;
       //should I be passing 0 here?
-      connection.query(query, answer.dept, (err, res) => {
+      connection.query(query, answer.dept, (err) => {
         if (err) throw err;
         console.log(
           `${answer.dept} has been successfully added to the department list!`
@@ -180,56 +180,107 @@ const addNewDepartment = () => {
     });
 };
 
-const addNewRole = () => {
-    connection.query("SELECT * FROM dept_table;", (err, res) => {
-        if (err) throw err;
-        inquirer.prompt([
-            {
-                name: "roleName",
-                type: "input",
-                message: "Enter name of new role:"
-            },
-            {
-                name: "roleSalary",
-                type: "input",
-                message: "Enter salary of new role:",
-                validate: function(value) {
-                    if(isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                }
-            },
-            {
-                name: "roleDept",
-                type: "rawlist",
-                message: "Select department of new role:",
-                choices: function () {
-                    return role_table.map((role) => res.manager_id);
-                    // const choicesArray = [];
-                    // for(let i = 0; i < role_table.length; i++) {
-                    //     choicesArray.push(role_table[i].manager_id)
-                    // }
-                    // return choicesArray;
-            }
-        ]).then(answer => {
-            const query =
-            `INSERT INTO role_table (title, salary, dept_id)
-            VALUES (?, ?, ?)`;
-            connection.query(
-                query,
-                [answer.roleName, answer.roleSalary, answer.roleDept],
-                (err, res) => {
-                  if (err) throw err;
-                  console.log(
-                    `${answer.roleName} has been successfully added to the role list!`
-                  );
-                  mainMenu();
-          }
-        );
-      });
-  });
-};
-    
+// const addNewRole = () => {
+//     connection.query("SELECT * FROM dept_table;", (err, res) => {
+//         if (err) throw err;
+//         inquirer.prompt([
+//             {
+//                 name: "roleName",
+//                 type: "input",
+//                 message: "Enter name of new role:"
+//             },
+//             {
+//                 name: "roleSalary",
+//                 type: "input",
+//                 message: "Enter salary of new role:",
+//                 validate: function(value) {
+//                     if(isNaN(value) === false) {
+//                         return true;
+//                     }
+//                     return false;
+//                 }
+//             },
+//             {
+//                 name: "roleDept",
+//                 type: "rawlist",
+//                 message: "Select department of new role:",
+//                 choices: function () {
+//                     return dept_table.map(() => res.dept_name);
+//                     // const choicesArray = [];
+//                     // for(let i = 0; i < dept_table.length; i++) {
+//                     //     choicesArray.push(dept_table[i].dept_name)
+//                     // }
+//                     // return choicesArray;
+//             }
+//         ]).then(answer => {
+//             const query =
+//             `INSERT INTO role_table (title, salary, dept_id)
+//             VALUES (?, ?, ?)`;
+//             connection.query(
+//                 query,
+//                 [answer.roleName, answer.roleSalary, answer.roleDept],
+//                 (err) => {
+//                   if (err) throw err;
+//                   console.log(
+//                     `${answer.roleName} has been successfully added to the role list!`
+//                   );
+//                   mainMenu();
+//           }
+//         );
+//       });
+//   });
+// };
 
-// updateEmployeeRole();
+const updateEmployeeRole = () => {
+  connection.query("SELECT * FROM employee_table;", (err, res) => {
+    if (err) throw err;
+    inquirer.prompt({
+      name: "employee",
+      type: "rawlist",
+      message: "Select employee to update role for:",
+      choices: function () {
+        return employee_table.map(() => res.first_name + res.last_name);
+        // const choicesArray = [];
+        // for(let i = 0; i < role_table.length; i++) {
+        //     choicesArray.push(role_table[i].manager_id)
+        // }
+        // return choicesArray;
+      },
+    }).then(answer1 => {
+        connection.query("SELECT * FROM role_table;", (err, res) => {
+            if (err) throw err;
+            inquirer.prompt({
+                    name: "role",
+                    type: "rawlist",
+                    message: "Select role of new employee:",
+                    choices: function () {
+                      return role_table.map(() => res.title);
+                      // const choicesArray = [];
+                      // for(let i  = 0; i < role_table.length; i++) {
+                      //     choicesArray.push(role_table[i].title)
+                      // }
+                      // return choicesArray;
+                    }
+              }
+            }).then(answer2 => {
+                const query = `
+                UPDATE employee_table
+                SET role_id = ?
+                WHERE employee_id = ?;`;
+          connection.query(
+            query,
+            [answer2.role, answer1.employee],
+            (err) => {
+              if (err) throw err;
+              console.log(
+                `${answer1.employee} successfully updated their role to ${answer2.role}!`
+              );
+              mainMenu();
+            }
+          );
+            })
+          });
+    })
+  });
+
+};
