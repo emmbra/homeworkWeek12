@@ -97,22 +97,66 @@ const viewAllRoles = () => {
   });
 };
 
-// const addNewEmployee = () => {
-//   inquirer
-//     .prompt([
-//       {
-//         name: firstName,
-//         type: "input",
-//         message: "Enter first name of new employee:",
-//       },
-//       {
-//         name: lastName,
-//         type: "input",
-//         message: "Enter last name of new employee:",
-//       },
-//     ])
-//     .then((answer) => {});
-// };
+const addNewEmployee = () => {
+  connection.query("SELECT * FROM role_table;", (err, res) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "firstName",
+          type: "input",
+          message: "Enter first name of new employee:",
+        },
+        {
+          name: "lastName",
+          type: "input",
+          message: "Enter last name of new employee:",
+        },
+        {
+          name: "role",
+          type: "rawlist",
+          message: "Select role of new employee:",
+          choices: function () {
+            return role_table.map((role) => res.title);
+            // const choicesArray = [];
+            // for(let i  = 0; i < role_table.length; i++) {
+            //     choicesArray.push(role_table[i].title)
+            // }
+            // return choicesArray;
+          },
+        },
+        {
+          name: "manager",
+          type: "rawlist",
+          message: "Select manager of new employee:",
+          choices: function () {
+            return role_table.map((role) => res.manager_id);
+            // const choicesArray = [];
+            // for(let i = 0; i < role_table.length; i++) {
+            //     choicesArray.push(role_table[i].manager_id)
+            // }
+            // return choicesArray;
+          },
+        },
+      ])
+      .then((answer) => {
+        const query = `
+              INSERT INTO employee_table (first_name, last_name, role_id, manager_id)
+              VALUES (?, ?, ?, ?)`;
+        connection.query(
+          query,
+          [answer.firstName, answer.lastName, answer.role, answer.manager],
+          (err, res) => {
+            if (err) throw err;
+            console.log(
+              `${answer.firstName} ${answer.lastName} has been successfully added to the employee list!`
+            );
+            mainMenu();
+          }
+        );
+      });
+  });
+};
 
 const addNewDepartment = () => {
   inquirer
@@ -125,13 +169,17 @@ const addNewDepartment = () => {
       const query = `
         INSERT INTO dept_table (id, dept_name)
         VALUES (0, ?);`;
+      //should I be passing 0 here?
       connection.query(query, answer.dept, (err, res) => {
         if (err) throw err;
-        console.log(`${answer.dept} has been successfully added to the department list!`);
+        console.log(
+          `${answer.dept} has been successfully added to the department list!`
+        );
         mainMenu();
       });
     });
 };
 
 // addNewRole()
+
 // updateEmployeeRole();
