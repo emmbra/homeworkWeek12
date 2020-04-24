@@ -173,6 +173,7 @@ const addNewEmployee = async () => {
         VALUES (?, ?, ?, ?)`;
         await db.query(
           query,
+          // how to destructure ids from answer?
           [answer.firstName, answer.lastName, answer.role, answer.manager],
           (err) => {
             if (err) throw err;
@@ -252,7 +253,8 @@ const addNewRole = async () => {
       VALUES (?, ?, ?)`;
         db.query(
           query,
-          [answer.roleName, answer.roleSalary, answer.roleDept.id],
+          // how to destructure id from dept answer?
+          [answer.roleName, answer.roleSalary, answer.roleDept],
           (err) => {
             if (err) throw err;
             console.log(
@@ -275,6 +277,8 @@ const updateEmployeeRole = async () => {
   try {
     employeeData = await db.query(employeeQuery);
     roleData = await db.query(roleQuery);
+    console.log("employee data", employeeData);
+    console.log("role data", roleData);
   } catch (error) {
     console.log(error);
   }
@@ -287,7 +291,7 @@ const updateEmployeeRole = async () => {
         choices: function () {
           return employeeData.map(
             (employee) =>
-              employee.first_name + " " + employee.last_name + " " + employee.id
+              employee.id + " " + employee.first_name + " " + employee.last_name
           );
         },
       },
@@ -296,20 +300,44 @@ const updateEmployeeRole = async () => {
         type: "rawlist",
         message: "Select role of new employee:",
         choices: function () {
-          return roleData.map((role) => role.title + " " + role.id);
+          return roleData.map((role) => role.id + " " + role.title);
         },
       },
     ])
     .then(async (answer) => {
+      console.log(answer.employee.slice(0, 1))
+      let employeeID;
+      let roleID;
+      console.log("answer", answer);
       try {
-        const query = `UPDATE employee_table SET role_id = ? WHERE employee_id = ?;`;
-        await db.query(query, [answer.id, answer.id], (err) => {
-          if (err) throw err;
-          console.log(
-            `${answer.employee} successfully updated their role to ${answer.role}!`
-          );
-          mainMenu();
-        });
+        for (let i = 0; i < employeeData.length; i++) {
+          if (employeeData[i].id == answer.employee.slice(0, 1)) {
+            employeeID = employeeData[i].id;
+            console.log("employeedata", employeeData)
+            
+          }
+        }
+        for (let i = 0; i < roleData.length; i++) {
+          if (roleData[i].id == answer.role.slice(0, 1)) {
+            roleID = roleData[i].id;
+            console.log("roledata", roleData)
+          }
+        }
+        console.log(employeeID, roleID);
+        const query = `UPDATE employee_table SET role_id = ? WHERE id = ?;`;
+        // how to destructure ids from answer?
+
+        const data =  await db.query(query, [roleID, employeeID]);
+        console.log(data);
+        console.log(
+          `${answer.employee} successfully updated their role to ${answer.role}!`
+        // await db.query(query, [roleID, employeeID], (err) => {
+        //   if (err) throw err;
+
+        //   );
+        //   mainMenu();
+        // });
+        mainMenu();
       } catch (error) {
         console.log(error);
       }
