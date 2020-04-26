@@ -161,7 +161,14 @@ const addNewEmployee = async () => {
         type: "rawlist",
         message: "Select manager of new employee:",
         choices: function () {
-            return employeeData.map((employee) => employee.manager_id + " " + employee.first_name + " " + employee.last_name);
+          return employeeData.map(
+            (employee) =>
+              employee.manager_id +
+              " " +
+              employee.first_name +
+              " " +
+              employee.last_name
+          );
         },
       },
     ])
@@ -183,8 +190,15 @@ const addNewEmployee = async () => {
         const query = `
         INSERT INTO employee_table (first_name, last_name, role_id, manager_id)
         VALUES (?, ?, ?, ?)`;
-        const data = await db.query(query, [answer.firstName, answer.lastName, roleID, managerID]);
-        console.log(`${answer.firstName} ${answer.lastName} has been successfully added to the employee list!`);
+        const data = await db.query(query, [
+          answer.firstName,
+          answer.lastName,
+          roleID,
+          managerID,
+        ]);
+        console.log(
+          `${answer.firstName} ${answer.lastName} has been successfully added to the employee list!`
+        );
         mainMenu();
       } catch (error) {
         console.log(error);
@@ -192,7 +206,7 @@ const addNewEmployee = async () => {
     });
 };
 
-const addNewDepartment = () => {
+const addNewDepartment = async () => {
   inquirer
     .prompt({
       name: "dept",
@@ -206,6 +220,7 @@ const addNewDepartment = () => {
         console.log(
           `${answer.dept} has been successfully added to the department list!`
         );
+        console.table(deptQuery2);
         mainMenu();
       } catch (error) {
         console.log(error);
@@ -244,30 +259,31 @@ const addNewRole = async () => {
         type: "rawlist",
         message: "Select department of new role:",
         choices: function () {
-          return deptData.map(
-            (dept) => dept.id + " " + dept.dept_name
-          );
+          return deptData.map((dept) => dept.id + " " + dept.dept_name);
         },
       },
     ])
     .then(async (answer) => {
-      console.log(answer.roleDept.slice(0, 1))
+      console.log(answer.roleDept.slice(0, 1));
       let deptID;
       try {
         for (let i = 0; i < deptData.length; i++) {
           if (deptData[i].id == answer.roleDept.slice(0, 1)) {
             deptID = deptData[i].id;
-            console.log("deptdata", deptData)
-            
+            console.log("deptdata", deptData);
           }
         }
         const query = `INSERT INTO role_table (title, salary, dept_id)
       VALUES (?, ?, ?)`;
-        const data = await db.query(query, [answer.roleName, answer.roleSalary, deptID]);
-            console.log(
-              `${answer.roleName} has been successfully added to the role list!`
-            );
-            mainMenu();
+        const data = await db.query(query, [
+          answer.roleName,
+          answer.roleSalary,
+          deptID,
+        ]);
+        console.log(
+          `${answer.roleName} has been successfully added to the role list!`
+        );
+        mainMenu();
       } catch (error) {
         console.log(error);
       }
@@ -308,7 +324,7 @@ const updateEmployeeRole = async () => {
       },
     ])
     .then(async (answer) => {
-      console.log(answer.employee.slice(0, 1))
+      console.log(answer.employee.slice(0, 1));
       let employeeID;
       let roleID;
       console.log("answer", answer);
@@ -316,26 +332,28 @@ const updateEmployeeRole = async () => {
         for (let i = 0; i < employeeData.length; i++) {
           if (employeeData[i].id == answer.employee.slice(0, 1)) {
             employeeID = employeeData[i].id;
-            console.log("employeedata", employeeData)
-            
+            console.log("employeedata", employeeData);
           }
         }
         for (let i = 0; i < roleData.length; i++) {
           if (roleData[i].id == answer.role.slice(0, 1)) {
             roleID = roleData[i].id;
-            console.log("roledata", roleData)
+            console.log("roledata", roleData);
           }
         }
         console.log(employeeID, roleID);
         const query = `UPDATE employee_table SET role_id = ? WHERE id = ?;`;
-        const data =  await db.query(query, [roleID, employeeID]);
+        const data = await db.query(query, [roleID, employeeID]);
         console.log(
-          `${answer.employee} successfully updated their role to ${answer.role}!`)
+          `${answer.employee} successfully updated their role to ${answer.role}!`
+        );
         mainMenu();
       } catch (error) {
         console.log(error);
       }
     });
 };
+
+// invoke main menu on app start
 
 mainMenu();
