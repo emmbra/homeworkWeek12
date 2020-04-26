@@ -133,7 +133,6 @@ const addNewEmployee = async () => {
   try {
     employeeData = await db.query(employeeQuery);
     roleData = await db.query(roleQuery);
-    console.log(employeeData, roleData);
   } catch (error) {
     console.log(error);
   }
@@ -154,7 +153,7 @@ const addNewEmployee = async () => {
         type: "rawlist",
         message: "Select role of new employee:",
         choices: function () {
-          return roleData.map((role) => role.title);
+          return roleData.map((role) => role.id + " " + role.title);
         },
       },
       {
@@ -162,27 +161,31 @@ const addNewEmployee = async () => {
         type: "rawlist",
         message: "Select manager of new employee:",
         choices: function () {
-          return employeeData.map((manager) => manager.manager_id);
+            return employeeData.map((employee) => employee.manager_id + " " + employee.first_name + " " + employee.last_name);
         },
       },
     ])
     .then(async (answer) => {
+      let roleID;
+      let managerID;
       try {
+        for (let i = 0; i < roleData.length; i++) {
+          if (roleData[i].id == answer.role.slice(0, 1)) {
+            roleID = roleData[i].id;
+          }
+        }
+        for (let i = 0; i < employeeData.length; i++) {
+          if (employeeData[i].id == answer.manager.slice(0, 1)) {
+            managerID = employeeData[i].manager_id;
+          }
+        }
+
         const query = `
         INSERT INTO employee_table (first_name, last_name, role_id, manager_id)
         VALUES (?, ?, ?, ?)`;
-        await db.query(
-          query,
-          // how to destructure ids from answer?
-          [answer.firstName, answer.lastName, answer.role, answer.manager],
-          (err) => {
-            if (err) throw err;
-            console.log(
-              `${answer.firstName} ${answer.lastName} has been successfully added to the employee list!`
-            );
-            mainMenu();
-          }
-        );
+        const data = await db.query(query, [answer.firstName, answer.lastName, roleID, managerID]);
+        console.log(`${answer.firstName} ${answer.lastName} has been successfully added to the employee list!`);
+        mainMenu();
       } catch (error) {
         console.log(error);
       }
@@ -325,10 +328,7 @@ const updateEmployeeRole = async () => {
         }
         console.log(employeeID, roleID);
         const query = `UPDATE employee_table SET role_id = ? WHERE id = ?;`;
-        // how to destructure ids from answer?
-
         const data =  await db.query(query, [roleID, employeeID]);
-        console.log(data);
         console.log(
           `${answer.employee} successfully updated their role to ${answer.role}!`)
         mainMenu();

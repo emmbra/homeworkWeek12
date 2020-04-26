@@ -22,7 +22,7 @@ CREATE TABLE employee_table (
     first_name VARCHAR(50),
     last_name VARCHAR(30),
     role_id INTEGER NOT NULL AUTO_INCREMENT,
-    manager_id INTEGER,
+    manager_id INTEGER AUTO_INCREMENT,
     PRIMARY KEY (id)
 );
 
