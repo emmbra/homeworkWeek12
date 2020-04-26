@@ -242,27 +242,29 @@ const addNewRole = async () => {
         message: "Select department of new role:",
         choices: function () {
           return deptData.map(
-            (roleDept) => roleDept.dept_name + " " + roleDept.id
+            (dept) => dept.id + " " + dept.dept_name
           );
         },
       },
     ])
     .then(async (answer) => {
+      console.log(answer.roleDept.slice(0, 1))
+      let deptID;
       try {
+        for (let i = 0; i < deptData.length; i++) {
+          if (deptData[i].id == answer.roleDept.slice(0, 1)) {
+            deptID = deptData[i].id;
+            console.log("deptdata", deptData)
+            
+          }
+        }
         const query = `INSERT INTO role_table (title, salary, dept_id)
       VALUES (?, ?, ?)`;
-        db.query(
-          query,
-          // how to destructure id from dept answer?
-          [answer.roleName, answer.roleSalary, answer.roleDept],
-          (err) => {
-            if (err) throw err;
+        const data = await db.query(query, [answer.roleName, answer.roleSalary, deptID]);
             console.log(
               `${answer.roleName} has been successfully added to the role list!`
             );
             mainMenu();
-          }
-        );
       } catch (error) {
         console.log(error);
       }
@@ -277,8 +279,6 @@ const updateEmployeeRole = async () => {
   try {
     employeeData = await db.query(employeeQuery);
     roleData = await db.query(roleQuery);
-    console.log("employee data", employeeData);
-    console.log("role data", roleData);
   } catch (error) {
     console.log(error);
   }
@@ -330,13 +330,7 @@ const updateEmployeeRole = async () => {
         const data =  await db.query(query, [roleID, employeeID]);
         console.log(data);
         console.log(
-          `${answer.employee} successfully updated their role to ${answer.role}!`
-        // await db.query(query, [roleID, employeeID], (err) => {
-        //   if (err) throw err;
-
-        //   );
-        //   mainMenu();
-        // });
+          `${answer.employee} successfully updated their role to ${answer.role}!`)
         mainMenu();
       } catch (error) {
         console.log(error);
