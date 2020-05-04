@@ -204,7 +204,7 @@ const addNewDepartment = async () => {
         console.log(
           `${answer.dept} has been successfully added to the department list!`
         );
-        console.table(deptQuery2);
+        console.table(deptQuery);
         mainMenu();
       } catch (error) {
         console.log(error);

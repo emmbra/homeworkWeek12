@@ -33,6 +33,10 @@ Difficulties included:
 * nodemon and inquirer do not work well together so there was a lot of shutting down the server every time I made changes to test things out.
 * making the break through for extracting particular information from queries was difficult until I could see the pattern and make sense of the errors returned by node.
 
+## Screenshots
+
+![GIF of Employee Tracker](https://github.com/emmbra/homeworkWeek12/blob/master/assets/images/homework12demo.gif)
+
 ## Credits
 
 Thank you to Berkeley Coding Bootcamp, my instructor Emmanual Jucaban, and my TAs Musa Akbari and Sergio Di Martino for answering all my questions and helping me along the way.
